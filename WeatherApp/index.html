@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atmosphere | Premium Weather</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Premium thin fonts akin to Apple's SF Pro -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons for minimalist, elegant vectors -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body class="theme-dark">
+    <!-- Full-Screen Cinematic Weather Canvas Engine -->
+    <canvas id="cinematic-canvas"></canvas>
+
+    <div class="noise-overlay"></div>
+
+    <!-- Premium Top Navigation -->
+    <nav class="top-nav hidden" id="top-nav">
+        <div class="nav-logo" id="nav-home-btn" title="Return Home" role="button" tabindex="0">
+            <i class="ph ph-planet" aria-hidden="true"></i>
+            <span>Atmosphere</span>
+        </div>
+    </nav>
+
+    <main class="app-container">
+
+        <!-- Initial Welcome State (Homepage Hero) -->
+        <div id="initial-state" class="home-hero">
+            <div class="hero-content">
+                <i class="ph ph-planet initial-icon" aria-hidden="true"></i>
+                <h2 class="hero-title">Atmosphere</h2>
+                <p class="hero-subtitle">Enter a city name to begin the experience.</p>
+
+                <div class="search-container hero-search">
+                    <div class="search-bar">
+                        <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                        <input type="text" id="hero-search-input" class="search-input" placeholder="Search city..." autocomplete="off" spellcheck="false" aria-label="Search city">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skeleton Loader (Shimmer effect) -->
+        <div id="skeleton-loader" class="dashboard-grid hidden">
+            <div class="dashboard-left">
+                <div class="search-container">
+                    <div class="search-bar skeleton-active"></div>
+                </div>
+                <div class="primary-info glass-panel skeleton-active">
+                    <div class="skeleton-city"></div>
+                    <div class="skeleton-temp"></div>
+                </div>
+                <div class="bento-grid skeleton-active">
+                    <div class="skeleton-box"></div>
+                    <div class="skeleton-box"></div>
+                    <div class="skeleton-box"></div>
+                    <div class="skeleton-box"></div>
+                </div>
+            </div>
+            <div class="dashboard-right" style="flex-direction: column; gap: 24px;">
+                <div class="skeleton-visualizer skeleton-active" style="flex: 1;"></div>
+                <div class="skeleton-active" style="width: 100%; height: 180px; border-radius: 32px;"></div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard Content (Two Column Layout) -->
+        <div id="weather-dashboard" class="dashboard-grid hidden">
+
+            <!-- Left Column: Primary Data -->
+            <div class="dashboard-left">
+                <!-- Persistent Search Bar -->
+                <div class="search-container dashboard-search">
+                    <div class="search-bar">
+                        <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                        <input type="text" id="dash-search-input" class="search-input" placeholder="Search another city..." autocomplete="off" spellcheck="false" aria-label="Search another city">
+                    </div>
+                </div>
+
+                <!-- Main Info Card -->
+                <div class="primary-info glass-panel">
+                    <div class="info-header">
+                        <div class="location-wrapper">
+                            <i class="ph ph-map-pin" aria-hidden="true"></i>
+                            <h1 id="city-name">San Francisco</h1>
+                        </div>
+                        <div class="badge" id="weather-condition">Partly Cloudy</div>
+                    </div>
+
+                    <div class="temp-display">
+                        <span id="temperature">72</span>
+                        <span class="unit">°C</span>
+                    </div>
+
+                    <div class="info-footer">
+                        <p class="feels-like">Feels like <span id="feels-like">74</span>°</p>
+                        <p class="current-date" id="current-date">Tue, Oct 24</p>
+                    </div>
+                </div>
+
+                <!-- Bento Metrics -->
+                <div class="bento-grid glass-panel">
+                    <div class="bento-item">
+                        <div class="bento-header">
+                            <i class="ph ph-drop" aria-hidden="true"></i>
+                            <span>Humidity</span>
+                        </div>
+                        <div class="bento-value" id="humidity">45%</div>
+                    </div>
+                    <div class="bento-item">
+                        <div class="bento-header">
+                            <i class="ph ph-wind" aria-hidden="true"></i>
+                            <span>Wind</span>
+                        </div>
+                        <div class="bento-value" id="wind-speed">12 km/h</div>
+                    </div>
+                    <div class="bento-item">
+                        <div class="bento-header">
+                            <i class="ph ph-gauge" aria-hidden="true"></i>
+                            <span>Pressure</span>
+                        </div>
+                        <div class="bento-value" id="pressure">1012 hPa</div>
+                    </div>
+                    <div class="bento-item">
+                        <div class="bento-header">
+                            <i class="ph ph-eye" aria-hidden="true"></i>
+                            <span>Visibility</span>
+                        </div>
+                        <div class="bento-value" id="visibility">10 km</div>
+                    </div>
+                    <div class="bento-item">
+                        <div class="bento-header">
+                            <i class="ph ph-sun-horizon" aria-hidden="true"></i>
+                            <span>Sunrise</span>
+                        </div>
+                        <div class="bento-value" id="sunrise">06:30 AM</div>
+                    </div>
+                    <div class="bento-item">
+                        <div class="bento-header">
+                            <i class="ph ph-moon-stars" aria-hidden="true"></i>
+                            <span>Sunset</span>
+                        </div>
+                        <div class="bento-value" id="sunset">07:45 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Forecast & Free-Space for Simulation -->
+            <div class="dashboard-right">
+                <!-- Empty spacer to allow the cinematic background to shine through where the old static icon was -->
+                <div style="flex: 1; min-height: 250px;"></div>
+
+                <!-- 7-Day Forecast Section (Apple Wallet Stack Style) -->
+                <div class="forecast-section glass-panel">
+                    <div class="forecast-header">
+                        <h3 class="forecast-title">7 Day Forecast</h3>
+                    </div>
+                    <div class="forecast-stack" id="forecast-stack">
+                        <!-- Cards injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Elegant Error Toast -->
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
